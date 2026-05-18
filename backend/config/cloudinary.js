@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import multer from 'multer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,81 +9,33 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const artworkStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'artverse/artworks',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [
-      { width: 2000, height: 2000, crop: 'limit', quality: 'auto:best' },
-    ],
-    format: 'webp',
-  },
-});
+export const uploadToCloudinary = async (file, folder = 'artworks') => {
+  try {
+    const result = await cloudinary.uploader.upload(file.path, {
+      folder: `virtual-art-gallery/${folder}`,
+      resource_type: 'auto',
+      quality: 'auto:best',
+      fetch_format: 'auto',
+    });
 
-const thumbnailStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'artverse/thumbnails',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [
-      { width: 800, height: 800, crop: 'fill', quality: 'auto:good' },
-    ],
-    format: 'webp',
-  },
-});
+    return {
+      url: result.secure_url,
+      publicId: result.public_id,
+      width: result.width,
+      height: result.height,
+      format: result.format,
+    };
+  } catch (error) {
+    throw new Error(`Cloudinary upload failed: ${error.message}`);
+  }
+};
 
-const assetStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'artverse/assets',
-    resource_type: 'raw',
-    allowed_formats: ['glb', 'gltf', 'hdr', 'mp3', 'ogg'],
-  },
-});
+export const deleteFromCloudinary = async (publicId) => {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    throw new Error(`Cloudinary deletion failed: ${error.message}`);
+  }
+};
 
-const avatarStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'artverse/avatars',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-    transformation: [
-      { width: 400, height: 400, crop: 'fill', gravity: 'face', quality: 'auto' },
-    ],
-    format: 'webp',
-  },
-});
-
-export const uploadArtwork = multer({
-  storage: artworkStorage,
-  limits: { fileSize: 50 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'), false);
-    }
-  },
-});
-
-export const uploadThumbnail = multer({
-  storage: thumbnailStorage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
-
-export const uploadAsset = multer({
-  storage: assetStorage,
-  limits: { fileSize: 500 * 1024 * 1024 },
-});
-
-export const uploadAvatar = multer({
-  storage: avatarStorage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-});
-
-export const uploadMultipleArtworks = multer({
-  storage: artworkStorage,
-  limits: { fileSize: 50 * 1024 * 1024, files: 10 },
-});
-
-export { cloudinary };
+export default cloudinary;
