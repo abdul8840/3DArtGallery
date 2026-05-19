@@ -15,6 +15,7 @@ import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import artistRoutes from './routes/artistRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -84,6 +85,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/artists', artistRoutes);
+app.use('/api/cart', cartRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
