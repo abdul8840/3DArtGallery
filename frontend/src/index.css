@@ -1,1 +1,266 @@
 @import "tailwindcss";
+
+/* Custom CSS Variables */
+:root {
+  --color-primary: #1a1a1a;
+  --color-secondary: #d4af37;
+  --color-accent: #c9a961;
+  --color-background: #ffffff;
+  --color-surface: #f8f9fa;
+  --color-text: #1a1a1a;
+  --color-text-light: #6b7280;
+  --color-border: #e5e7eb;
+  --color-error: #ef4444;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode variables */
+.dark {
+  --color-primary: #ffffff;
+  --color-background: #0a0a0a;
+  --color-surface: #1a1a1a;
+  --color-text: #ffffff;
+  --color-text-light: #9ca3af;
+  --color-border: #2d2d2d;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+h3 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-secondary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-secondary);
+  color: white;
+}
+
+/* Glassmorphism utility class */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Luxury gradient backgrounds */
+.gradient-primary {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+.gradient-gold {
+  background: linear-gradient(135deg, #d4af37 0%, #c9a961 100%);
+}
+
+.gradient-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Utility classes */
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+/* Image optimization */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Smooth transitions */
+a, button, input, select, textarea {
+  transition: all var(--transition-base);
+}
+
+/* Remove spinner from number inputs */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 3px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--color-secondary);
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Canvas container for 3D scenes */
+.canvas-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #000000, #1a1a1a);
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  :root {
+    font-size: 14px;
+  }
+}
