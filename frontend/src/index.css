@@ -38,13 +38,6 @@
   --color-border: #2d2d2d;
 }
 
-/* Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
