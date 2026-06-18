@@ -6,6 +6,8 @@ import {
   IoPersonOutline,
   IoMailOutline,
   IoLockClosedOutline,
+  IoEyeOutline,
+  IoEyeOffOutline,
 } from 'react-icons/io5';
 import { register } from '@store/slices/authSlice';
 import Button from '@components/common/Button';
@@ -20,60 +22,42 @@ import {
 const RegisterForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPw, setShowPw] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
+    setFormData((p) => ({ ...p, [name]: value }));
+    if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
   };
 
   const validate = () => {
-    const newErrors = {};
-
-    const nameError = validateRequired(formData.name, 'Name');
-    if (nameError) newErrors.name = nameError;
-
-    const emailError = validateEmail(formData.email);
-    if (emailError) newErrors.email = emailError;
-
-    const passwordError = validatePassword(formData.password);
-    if (passwordError) newErrors.password = passwordError;
-
-    const confirmPasswordError = validatePasswordConfirmation(
-      formData.password,
-      formData.confirmPassword
-    );
-    if (confirmPasswordError) newErrors.confirmPassword = confirmPasswordError;
-
-    return newErrors;
+    const errs = {};
+    const nameErr = validateRequired(formData.name, 'Name');
+    if (nameErr) errs.name = nameErr;
+    const emailErr = validateEmail(formData.email);
+    if (emailErr) errs.email = emailErr;
+    const pwErr = validatePassword(formData.password);
+    if (pwErr) errs.password = pwErr;
+    const confirmErr = validatePasswordConfirmation(formData.password, formData.confirmPassword);
+    if (confirmErr) errs.confirmPassword = confirmErr;
+    return errs;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
+    const errs = validate();
+    if (Object.keys(errs).length) { setErrors(errs); return; }
     setLoading(true);
     try {
-      const { confirmPassword, ...registerData } = formData;
-      await dispatch(register(registerData)).unwrap();
+      const { confirmPassword, ...data } = formData;
+      await dispatch(register(data)).unwrap();
       navigate('/');
-    } catch (error) {
-      // Error handled by Redux slice
+    } catch {
+      // handled by Redux slice
     } finally {
       setLoading(false);
     }
@@ -81,101 +65,104 @@ const RegisterForm = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md"
+      transition={{ duration: 0.4 }}
     >
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-display font-bold text-gray-900 mb-2">
-          Create Account
-        </h2>
-        <p className="text-gray-600">Join our community of art enthusiasts</p>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-[#0a1628] mb-1.5" style={{ fontFamily: 'Playfair Display, serif' }}>
+          Create account
+        </h1>
+        <p className="text-[#64748b] text-sm">Join the world's premier virtual art gallery</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           type="text"
           name="name"
           label="Full Name"
-          placeholder="Enter your full name"
+          placeholder="Your full name"
           value={formData.name}
           onChange={handleChange}
           error={errors.name}
           icon={<IoPersonOutline className="w-5 h-5" />}
           required
+          autoComplete="name"
         />
 
         <Input
           type="email"
           name="email"
           label="Email Address"
-          placeholder="Enter your email"
+          placeholder="you@example.com"
           value={formData.email}
           onChange={handleChange}
           error={errors.email}
           icon={<IoMailOutline className="w-5 h-5" />}
           required
+          autoComplete="email"
         />
 
         <Input
-          type="password"
+          type={showPw ? 'text' : 'password'}
           name="password"
           label="Password"
-          placeholder="Create a password"
+          placeholder="Create a strong password"
           value={formData.password}
           onChange={handleChange}
           error={errors.password}
+          helperText="Minimum 8 characters"
           icon={<IoLockClosedOutline className="w-5 h-5" />}
-          helperText="Must be at least 8 characters"
+          iconRight={
+            <button type="button" onClick={() => setShowPw(!showPw)} className="text-[#94a3b8] hover:text-[#0f2447] transition-colors">
+              {showPw ? <IoEyeOffOutline className="w-5 h-5" /> : <IoEyeOutline className="w-5 h-5" />}
+            </button>
+          }
           required
         />
 
         <Input
-          type="password"
+          type={showConfirm ? 'text' : 'password'}
           name="confirmPassword"
           label="Confirm Password"
-          placeholder="Confirm your password"
+          placeholder="Repeat your password"
           value={formData.confirmPassword}
           onChange={handleChange}
           error={errors.confirmPassword}
           icon={<IoLockClosedOutline className="w-5 h-5" />}
+          iconRight={
+            <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="text-[#94a3b8] hover:text-[#0f2447] transition-colors">
+              {showConfirm ? <IoEyeOffOutline className="w-5 h-5" /> : <IoEyeOutline className="w-5 h-5" />}
+            </button>
+          }
           required
         />
 
-        <div className="flex items-start">
+        <div className="flex items-start gap-2.5 pt-1">
           <input
             type="checkbox"
             required
-            className="w-4 h-4 mt-1 text-yellow-600 border-gray-300 rounded focus:ring-yellow-500"
+            className="w-4 h-4 mt-0.5 accent-[#0f2447] rounded cursor-pointer shrink-0"
           />
-          <label className="ml-2 text-sm text-gray-600">
+          <label className="text-sm text-[#64748b] leading-relaxed">
             I agree to the{' '}
-            <Link to="/terms" className="text-yellow-600 hover:text-yellow-700">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link to="/privacy" className="text-yellow-600 hover:text-yellow-700">
-              Privacy Policy
-            </Link>
+            <Link to="/terms" className="font-semibold text-[#2563eb] hover:text-[#1d4ed8]">Terms of Service</Link>
+            {' '}and{' '}
+            <Link to="/privacy" className="font-semibold text-[#2563eb] hover:text-[#1d4ed8]">Privacy Policy</Link>
           </label>
         </div>
 
-        <Button type="submit" fullWidth loading={loading} size="lg">
-          Create Account
+        <Button type="submit" fullWidth loading={loading} size="lg" className="mt-2">
+          Create Free Account
         </Button>
       </form>
 
-      <div className="mt-6 text-center">
-        <p className="text-gray-600">
-          Already have an account?{' '}
-          <Link
-            to="/login"
-            className="text-yellow-600 hover:text-yellow-700 font-semibold"
-          >
-            Sign in
-          </Link>
-        </p>
-      </div>
+      <p className="mt-7 text-center text-sm text-[#64748b]">
+        Already have an account?{' '}
+        <Link to="/login" className="font-bold text-[#0f2447] hover:text-[#2563eb] transition-colors">
+          Sign in
+        </Link>
+      </p>
     </motion.div>
   );
 };

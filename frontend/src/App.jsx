@@ -168,25 +168,22 @@ function AppContent() {
         <Toaster
           position="top-right"
           toastOptions={{
-            duration: 3000,
+            duration: 3500,
             style: {
-              background: '#fff',
-              color: '#1a1a1a',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-              borderRadius: '12px',
-              padding: '16px',
+              background: '#0f2447',
+              color: '#ffffff',
+              boxShadow: '0 16px 48px rgba(2, 11, 24, 0.4)',
+              borderRadius: '14px',
+              padding: '14px 18px',
+              fontSize: '14px',
+              fontWeight: '500',
+              border: '1px solid rgba(59,130,246,0.25)',
             },
             success: {
-              iconTheme: {
-                primary: '#10b981',
-                secondary: '#fff',
-              },
+              iconTheme: { primary: '#10b981', secondary: '#0f2447' },
             },
             error: {
-              iconTheme: {
-                primary: '#ef4444',
-                secondary: '#fff',
-              },
+              iconTheme: { primary: '#f87171', secondary: '#0f2447' },
             },
           }}
         />

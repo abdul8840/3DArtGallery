@@ -1,28 +1,96 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import LoginForm from '@components/auth/LoginForm';
+import { IoSparklesOutline, IoDiamondOutline, IoShieldCheckmarkOutline } from 'react-icons/io5';
 
-const Login = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
-      </div>
+const perks = [
+  { icon: IoSparklesOutline, text: 'Immersive 3D virtual gallery experience' },
+  { icon: IoDiamondOutline, text: 'Exclusive access to limited-edition artworks' },
+  { icon: IoShieldCheckmarkOutline, text: 'Certified originals from verified artists' },
+];
+
+const Login = () => (
+  <div className="min-h-screen flex bg-white">
+    {/* Left panel — navy brand */}
+    <div className="hidden lg:flex lg:w-1/2 relative bg-[#020b18] flex-col items-center justify-center p-16 overflow-hidden">
+      {/* Orbs */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#163461]/50 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-[#2563eb]/15 blur-3xl pointer-events-none" />
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(#a8c8f5 1px, transparent 1px), linear-gradient(90deg, #a8c8f5 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+        }}
+      />
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-full max-w-md"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="relative z-10 text-center max-w-md"
       >
-        <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12">
-          <LoginForm />
-        </div>
+        {/* Logo */}
+        <Link to="/" className="inline-flex items-center gap-3 mb-12 group">
+          <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#2563eb] to-[#0f2447] flex items-center justify-center shadow-[0_8px_24px_rgba(37,99,235,0.4)] group-hover:shadow-[0_10px_30px_rgba(37,99,235,0.55)] group-hover:scale-105 transition-all duration-300">
+            <span className="text-white text-2xl font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>V</span>
+          </div>
+          <div className="text-left">
+            <p className="text-white font-bold text-lg" style={{ fontFamily: 'Playfair Display, serif' }}>Virtual Gallery</p>
+            <p className="text-[#6fa3e8] text-xs tracking-widest uppercase">Art Museum</p>
+          </div>
+        </Link>
+
+        <h2 className="text-4xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
+          The World's Finest
+          <br />
+          <span
+            className="text-transparent bg-clip-text"
+            style={{ backgroundImage: 'linear-gradient(135deg, #60a5fa 0%, #a8c8f5 100%)' }}
+          >
+            Art Platform
+          </span>
+        </h2>
+        <p className="text-[#6fa3e8] text-sm leading-relaxed mb-10">
+          Discover, collect, and own exceptional artworks from the world's most
+          talented artists — all in one stunning gallery.
+        </p>
+
+        <ul className="space-y-4 text-left">
+          {perks.map(({ icon: Icon, text }) => (
+            <li key={text} className="flex items-center gap-3 text-sm text-[#6fa3e8]">
+              <span className="w-8 h-8 rounded-xl bg-[#2563eb]/20 border border-[#2563eb]/40 flex items-center justify-center shrink-0">
+                <Icon className="w-4 h-4 text-[#60a5fa]" />
+              </span>
+              {text}
+            </li>
+          ))}
+        </ul>
       </motion.div>
     </div>
-  );
-};
+
+    {/* Right panel — form */}
+    <div className="w-full lg:w-1/2 flex flex-col items-center justify-center px-6 py-16 bg-white">
+      {/* Mobile logo */}
+      <Link to="/" className="lg:hidden flex items-center gap-3 mb-10">
+        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-[#2563eb] to-[#0f2447] flex items-center justify-center shadow-md">
+          <span className="text-white text-lg font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>V</span>
+        </div>
+        <span className="text-[#0a1628] font-bold text-lg" style={{ fontFamily: 'Playfair Display, serif' }}>Virtual Gallery</span>
+      </Link>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <LoginForm />
+      </motion.div>
+    </div>
+  </div>
+);
 
 export default Login;
