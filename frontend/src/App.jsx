@@ -25,24 +25,14 @@ import Products from '@pages/Products';
 import ProductDetail from '@pages/ProductDetail';
 import Cart from '@pages/Cart';
 import Wishlist from '@pages/Wishlist';
+import Checkout from '@pages/Checkout';
+import PaymentSuccess from '@pages/PaymentSuccess';
+import PaymentFailed from '@pages/PaymentFailed';
+import Orders from '@pages/Orders';
+import OrderDetail from '@pages/OrderDetail';
+import Profile from '@pages/Profile';
+import Dashboard from '@pages/admin/Dashboard';
 import NotFound from '@pages/NotFound';
-
-// Placeholder pages (Step 4)
-const Checkout = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <h1 className="text-4xl font-display">Checkout - Coming in Step 4</h1>
-  </div>
-);
-const Orders = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <h1 className="text-4xl font-display">Orders - Coming in Step 4</h1>
-  </div>
-);
-const Profile = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <h1 className="text-4xl font-display">Profile - Coming in Step 4</h1>
-  </div>
-);
 
 // Scroll to top component
 const ScrollToTop = () => {
@@ -76,14 +66,15 @@ const AppLayout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = ['/login', '/register'].includes(location.pathname);
   const is3DGallery = location.pathname === '/gallery';
+  const isPaymentPage = ['/payment-success', '/payment-failed'].includes(location.pathname);
 
   return (
     <div className="flex flex-col min-h-screen">
-      {!isAuthPage && !is3DGallery && <Header />}
-      <main className={!isAuthPage && !is3DGallery ? 'flex-1 pt-20' : 'flex-1'}>
+      {!isAuthPage && !is3DGallery && !isPaymentPage && <Header />}
+      <main className={!isAuthPage && !is3DGallery && !isPaymentPage ? 'flex-1 pt-20' : 'flex-1'}>
         {children}
       </main>
-      {!isAuthPage && !is3DGallery && <Footer />}
+      {!isAuthPage && !is3DGallery && !isPaymentPage && <Footer />}
     </div>
   );
 };
@@ -122,11 +113,21 @@ function AppContent() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/payment-failed" element={<PaymentFailed />} />
               <Route
                 path="/orders"
                 element={
                   <ProtectedRoute>
                     <Orders />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/orders/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrderDetail />
                   </ProtectedRoute>
                 }
               />
@@ -143,6 +144,16 @@ function AppContent() {
                 element={
                   <ProtectedRoute>
                     <Profile />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Admin Routes */}
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <Dashboard />
                   </ProtectedRoute>
                 }
               />
@@ -164,6 +175,18 @@ function AppContent() {
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
               borderRadius: '12px',
               padding: '16px',
+            },
+            success: {
+              iconTheme: {
+                primary: '#10b981',
+                secondary: '#fff',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
             },
           }}
         />

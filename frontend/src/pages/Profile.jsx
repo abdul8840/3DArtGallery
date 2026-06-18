@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import ProfileInfo from '@components/profile/ProfileInfo';
@@ -28,10 +27,6 @@ const Profile = () => {
 
   return (
     <>
-      <Helmet>
-        <title>My Profile | Virtual Art Gallery</title>
-        <meta name="description" content="Manage your account settings" />
-      </Helmet>
 
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

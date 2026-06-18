@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { fetchMyOrders } from '@store/slices/orderSlice';
 import OrderCard from '@components/order/OrderCard';
@@ -35,10 +34,6 @@ const Orders = () => {
 
   return (
     <>
-      <Helmet>
-        <title>My Orders | Virtual Art Gallery</title>
-        <meta name="description" content="View and track your orders" />
-      </Helmet>
 
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
