@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import {
   fetchProductBySlug,
@@ -57,14 +56,6 @@ const ProductDetail = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{product.title} by {product.artist?.name} | Virtual Art Gallery</title>
-        <meta name="description" content={product.description} />
-        <meta property="og:title" content={product.title} />
-        <meta property="og:description" content={product.description} />
-        <meta property="og:image" content={product.images?.[0]?.url} />
-        <meta property="og:type" content="product" />
-      </Helmet>
 
       <div className="min-h-screen bg-white">
         {/* Breadcrumb */}

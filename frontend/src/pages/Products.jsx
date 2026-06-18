@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { fetchProducts, setFilters, clearFilters } from '@store/slices/productSlice';
 import ProductGrid from '@components/product/ProductGrid';
@@ -76,13 +75,6 @@ const Products = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Artworks Collection | Virtual Art Gallery</title>
-        <meta
-          name="description"
-          content="Browse our curated collection of exceptional artworks from talented artists worldwide. Filter by category, price, and more."
-        />
-      </Helmet>
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}

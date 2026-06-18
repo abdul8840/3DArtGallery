@@ -20,17 +20,29 @@ import ProtectedRoute from '@components/auth/ProtectedRoute';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
 import Register from '@pages/Register';
+import Gallery3D from '@pages/Gallery3D';
+import Products from '@pages/Products';
+import ProductDetail from '@pages/ProductDetail';
+import Cart from '@pages/Cart';
+import Wishlist from '@pages/Wishlist';
 import NotFound from '@pages/NotFound';
 
-// Placeholder pages (will be built in Step 3 & 4)
-const Gallery3D = () => <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl font-display">3D Gallery - Coming in Step 3</h1></div>;
-const Products = () => <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl font-display">Products - Coming in Step 3</h1></div>;
-const ProductDetail = () => <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl font-display">Product Detail - Coming in Step 3</h1></div>;
-const Cart = () => <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl font-display">Cart - Coming in Step 3</h1></div>;
-const Checkout = () => <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl font-display">Checkout - Coming in Step 4</h1></div>;
-const Orders = () => <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl font-display">Orders - Coming in Step 4</h1></div>;
-const Wishlist = () => <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl font-display">Wishlist - Coming in Step 3</h1></div>;
-const Profile = () => <div className="min-h-screen flex items-center justify-center"><h1 className="text-4xl font-display">Profile - Coming in Step 4</h1></div>;
+// Placeholder pages (Step 4)
+const Checkout = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <h1 className="text-4xl font-display">Checkout - Coming in Step 4</h1>
+  </div>
+);
+const Orders = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <h1 className="text-4xl font-display">Orders - Coming in Step 4</h1>
+  </div>
+);
+const Profile = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <h1 className="text-4xl font-display">Profile - Coming in Step 4</h1>
+  </div>
+);
 
 // Scroll to top component
 const ScrollToTop = () => {
@@ -63,14 +75,15 @@ const AppInitializer = ({ children }) => {
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const isAuthPage = ['/login', '/register'].includes(location.pathname);
+  const is3DGallery = location.pathname === '/gallery';
 
   return (
     <div className="flex flex-col min-h-screen">
-      {!isAuthPage && <Header />}
-      <main className={!isAuthPage ? 'flex-1 pt-20' : 'flex-1'}>
+      {!isAuthPage && !is3DGallery && <Header />}
+      <main className={!isAuthPage && !is3DGallery ? 'flex-1 pt-20' : 'flex-1'}>
         {children}
       </main>
-      {!isAuthPage && <Footer />}
+      {!isAuthPage && !is3DGallery && <Footer />}
     </div>
   );
 };
@@ -78,82 +91,84 @@ const AppLayout = ({ children }) => {
 // Main App Component
 function AppContent() {
   return (
-    <Router>
-      <ScrollToTop />
-      <AppInitializer>
-        <AppLayout>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/gallery" element={<Gallery3D />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:slug" element={<ProductDetail />} />
+    <>
+      <Router>
+        <ScrollToTop />
+        <AppInitializer>
+          <AppLayout>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/gallery" element={<Gallery3D />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:slug" element={<ProductDetail />} />
 
-            {/* Protected Routes */}
-            <Route
-              path="/cart"
-              element={
-                <ProtectedRoute>
-                  <Cart />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/checkout"
-              element={
-                <ProtectedRoute>
-                  <Checkout />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/orders"
-              element={
-                <ProtectedRoute>
-                  <Orders />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/wishlist"
-              element={
-                <ProtectedRoute>
-                  <Wishlist />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected Routes */}
+              <Route
+                path="/cart"
+                element={
+                  <ProtectedRoute>
+                    <Cart />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <Checkout />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/orders"
+                element={
+                  <ProtectedRoute>
+                    <Orders />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/wishlist"
+                element={
+                  <ProtectedRoute>
+                    <Wishlist />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AppLayout>
-      </AppInitializer>
+              {/* 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AppLayout>
+        </AppInitializer>
 
-      {/* Toast Notifications */}
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: '#fff',
-            color: '#1a1a1a',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-            borderRadius: '12px',
-            padding: '16px',
-          },
-        }}
-      />
-    </Router>
+        {/* Toast Notifications */}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: '#fff',
+              color: '#1a1a1a',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+              borderRadius: '12px',
+              padding: '16px',
+            },
+          }}
+        />
+      </Router>
+    </>
   );
 }
 
